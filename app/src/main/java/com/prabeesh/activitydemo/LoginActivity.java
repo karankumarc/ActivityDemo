@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int REQ_CODE1 = 1;
+    private static final int REQ_CAMERA = 2;
+
     // Deceleration
     Button buttonLogin;
     EditText editTextUsername, editTextPassword;
@@ -37,11 +40,27 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     intent.putExtra("uname", username);
                     intent.putExtra("pass", password);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQ_CODE1);
                 }
             }
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQ_CODE1){
+            if(resultCode == RESULT_OK){
+                String receivedData = data.getExtras().getString("DataReturned");
+                Toast.makeText(LoginActivity.this, receivedData, Toast.LENGTH_SHORT).show();
+            } else if(resultCode == RESULT_CANCELED){
+                Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+
+        } else if(requestCode == REQ_CAMERA){
+            //Write code to handle picture which was returned
+        }
+    }
 }
